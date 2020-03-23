@@ -104,6 +104,7 @@ if __name__ == '__main__':
             disp_diff = np.abs(gt_disp[mask] - pred_disp[mask])
             bad_pixels = np.logical_and(disp_diff >= 3, (disp_diff / gt_disp[mask]) >= 0.05)
             d1_all[i] = 100.0 * bad_pixels.sum() / mask.sum()
+            cv2.imwrite(f"{i}_depth.png", pred_depth)
 
         abs_rel[i], sq_rel[i], rms[i], log_rms[i], a1[i], a2[i], a3[i] = compute_errors(gt_depth[mask], pred_depth[mask])
 
