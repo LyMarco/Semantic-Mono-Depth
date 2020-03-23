@@ -101,7 +101,7 @@ def read_file_data(files, data_root):
         else:
             num_probs += 1
             print('{} missing'.format(data_root + im))
-    print num_probs, 'files missing'
+    print(num_probs, 'files missing')
 
     return gt_files, gt_calib, im_sizes, im_files, cams
 
