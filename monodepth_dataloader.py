@@ -40,8 +40,8 @@ class MonodepthDataloader(object):
         if mode == 'test' and not self.params.do_stereo:
             left_image_path  = tf.string_join([self.data_path, split_line[0]])
             left_image_o  = self.read_image(left_image_path)
-#            semantic_image_path = tf.string_join([self.data_path, split_line[2]])
-#            semantic_image_o = self.read_semantic_gt(semantic_image_path)
+            # semantic_image_path = tf.string_join([self.data_path, split_line[2]])
+            # semantic_image_o = self.read_semantic_gt(semantic_image_path)
         else:
             left_image_path  = tf.string_join([self.data_path, split_line[0]])
             right_image_path = tf.string_join([self.data_path, split_line[1]])
@@ -79,8 +79,8 @@ class MonodepthDataloader(object):
         elif mode == 'test':
             self.left_image_batch = tf.stack([left_image_o,  tf.image.flip_left_right(left_image_o)],  0)
             self.left_image_batch.set_shape([2, None, None, 3])
-#            self.semantic_image_batch = tf.stack([semantic_image_o,  tf.image.flip_left_right(semantic_image_o)],  0)
-#            self.semantic_image_batch.set_shape( [2, None, None, 1])
+            # self.semantic_image_batch = tf.stack([semantic_image_o,  tf.image.flip_left_right(semantic_image_o)],  0)
+            # self.semantic_image_batch.set_shape( [2, None, None, 1])
 
             if self.params.do_stereo:
                 self.right_image_batch = tf.stack([right_image_o,  tf.image.flip_left_right(right_image_o)],  0)
