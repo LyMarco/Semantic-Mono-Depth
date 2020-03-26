@@ -272,6 +272,10 @@ def train(params):
 
         # GO!
         print("Start training loop")
+        if tf.test.gpu_device_name():
+            print('Default GPU Device: {}'.format(tf.test.gpu_device_name()))
+        else:
+            print("Please install GPU version of TF")
         start_step = global_step.eval(session=sess)
         start_time = time.time()
         for step in range(start_step, num_total_steps):
