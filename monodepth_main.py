@@ -271,6 +271,7 @@ def train(params):
                 sess.run(global_step.assign(0))
 
         # GO!
+        print("Start training loop")
         start_step = global_step.eval(session=sess)
         start_time = time.time()
         for step in range(start_step, num_total_steps):
