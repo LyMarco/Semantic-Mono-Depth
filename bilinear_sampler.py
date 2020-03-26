@@ -57,8 +57,14 @@ def bilinear_sampler_1d_h(input_images, x_offset, wrap_mode='border', name='bili
 
             im_flat = tf.reshape(im, tf.stack([-1, _num_channels]))
 
-            pix_l = tf.gather(im_flat, idx_l)
-            pix_r = tf.gather(im_flat, idx_r)
+            # pix_l = tf.gather(im_flat, idx_l)
+            pix_l = tf.dynamic_partition(
+                im_flat, idx_l, 2)  # (batch_size, n_dim)
+            pix_l = pix_l[1]
+
+            # pix_r = tf.gather(im_flat, idx_r)
+            pix_r = tf.dynamic_partition(im_flat, idx_r, 2)
+            pix_r = pix_r[1]
 
             weight_l = tf.expand_dims(x1_f - x, 1)
             weight_r = tf.expand_dims(x - x0_f, 1)
