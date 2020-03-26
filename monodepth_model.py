@@ -35,6 +35,7 @@ monodepth_parameters = namedtuple('parameters',
                         'disp_gradient_loss_weight, '
                         'lr_loss_weight, '
                         'task, '
+                        'device, '
                         'full_summary')
 
 class MonodepthModel(object):
