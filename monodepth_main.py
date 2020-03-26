@@ -26,6 +26,7 @@ from monodepth_dataloader import *
 from average_gradients import *
 
 parser = argparse.ArgumentParser(description='Monodepth TensorFlow implementation.')
+parser.add_argument('--device',                    type=str,   help='cpu or cuda', default='cuda')
 parser.add_argument('--mode',                      type=str,   help='train or test', default='train')
 parser.add_argument('--task',                      type=str,   help='depth, semantic, semantic-depth', default='semantic', choices=['depth', 'semantic', 'semantic-depth'])
 parser.add_argument('--model_name',                type=str,   help='model name', default='semantic-monodepth')
@@ -146,8 +147,13 @@ def test(params):
 
 def train(params):
     """Training loop."""
-    
-    with tf.Graph().as_default(), tf.device('/cpu:0'):
+
+    if args.device == 'cpu':
+        device = '/cpu:0'
+    else:
+        device = '/gpu:0'
+
+    with tf.Graph().as_default(), tf.device(device):
 
         global_step = tf.Variable(0, trainable=False)
 
@@ -299,7 +305,8 @@ def main(_):
         alpha_image_loss=args.alpha_image_loss,
         disp_gradient_loss_weight=args.disp_gradient_loss_weight,
         lr_loss_weight=args.lr_loss_weight, task = args.task,
-        full_summary=args.full_summary)
+        full_summary=args.full_summary,
+        device=args.device)
         
     if args.mode == 'train':
         train(params)
