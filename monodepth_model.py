@@ -483,6 +483,8 @@ class MonodepthModel(object):
 
             # SEMANTIC LOSS
           if 'semantic' in self.task:
+            # This is error: tf.nn.sparse_softmax_cross_entropy_with_logits(labels=self.semantic, logits=self.sem_est) shape mismatch
+            # switching to softmax_cross_entropy_with_logits (without being sparse) solve this, but more issues after
             self.semantic_loss = tf.reduce_mean(tf.multiply(tf.nn.sparse_softmax_cross_entropy_with_logits(labels=self.semantic, logits=self.sem_est), self.valid)) * 0.1
             self.total_loss += self.semantic_loss
             if 'warp-semantic' in self.task:
