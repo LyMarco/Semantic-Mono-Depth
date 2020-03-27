@@ -87,7 +87,8 @@ def test(params):
        print('Vars to restore ' + str(len(vars_to_restore)) + ' vs total vars ' + str(len(tf.trainable_variables())))
 
     # SESSION
-    config = tf.ConfigProto(allow_soft_placement=True)
+    gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.45)
+    config = tf.ConfigProto(allow_soft_placement=True, gpu_options=gpu_options)
     config.gpu_options.allow_growth = True
     sess = tf.Session(config=config)
 
