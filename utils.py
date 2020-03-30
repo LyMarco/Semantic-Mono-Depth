@@ -109,8 +109,7 @@ def colormap_depth(value, vmin=None, vmax=None, cmap=None):
     cm = plt.cm.get_cmap(cmap if cmap is not None else 'gray')
     colors = cm(np.arange(256))[:,:3]
     colors = tf.constant(colors, dtype=tf.float32)
-    value = tf.dynamic_partition(colors, indices, 2)  # (batch_size, n_dim)
-    value = value[1]
+    value = tf.gather(colors, indices)
     return value
 
 def get_num_classes():

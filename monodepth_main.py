@@ -26,7 +26,6 @@ from monodepth_dataloader import *
 from average_gradients import *
 
 parser = argparse.ArgumentParser(description='Monodepth TensorFlow implementation.')
-parser.add_argument('--device',                    type=str,   help='cpu or cuda', default='cuda')
 parser.add_argument('--mode',                      type=str,   help='train or test', default='train')
 parser.add_argument('--task',                      type=str,   help='depth, semantic, semantic-depth', default='semantic', choices=['depth', 'semantic', 'semantic-depth'])
 parser.add_argument('--model_name',                type=str,   help='model name', default='semantic-monodepth')
@@ -87,9 +86,7 @@ def test(params):
        print('Vars to restore ' + str(len(vars_to_restore)) + ' vs total vars ' + str(len(tf.trainable_variables())))
 
     # SESSION
-    gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.45)
-    config = tf.ConfigProto(allow_soft_placement=True, gpu_options=gpu_options)
-    config.gpu_options.allow_growth = True
+    config = tf.ConfigProto(allow_soft_placement=True)
     sess = tf.Session(config=config)
 
     # SAVER
@@ -149,13 +146,8 @@ def test(params):
 
 def train(params):
     """Training loop."""
-
-    if args.device == 'cpu':
-        device = '/cpu:0'
-    else:
-        device = '/gpu:0'
-
-    with tf.Graph().as_default(), tf.device(device):
+    
+    with tf.Graph().as_default(), tf.device('/cpu:0'):
 
         global_step = tf.Variable(0, trainable=False)
 
@@ -274,14 +266,11 @@ def train(params):
 
         # GO!
         print("Start training loop")
-        if tf.test.gpu_device_name():
-            print('Default GPU Device: {}'.format(tf.test.gpu_device_name()))
-        else:
-            print("Please install GPU version of TF")
+
         start_step = global_step.eval(session=sess)
         start_time = time.time()
         for step in range(start_step, num_total_steps):
-            print(step)
+            print("step", step)
             before_op_time = time.time()
             _, loss_value = sess.run([apply_gradient_op, total_loss])
             duration = time.time() - before_op_time
@@ -313,8 +302,7 @@ def main(_):
         alpha_image_loss=args.alpha_image_loss,
         disp_gradient_loss_weight=args.disp_gradient_loss_weight,
         lr_loss_weight=args.lr_loss_weight, task = args.task,
-        full_summary=args.full_summary,
-        device=args.device)
+        full_summary=args.full_summary)
         
     if args.mode == 'train':
         train(params)
