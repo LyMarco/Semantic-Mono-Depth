@@ -514,7 +514,7 @@ args_dict = {
     'kernel': 3,
     'num_filters': 64,
     'learn_rate': 0.001,
-    'batch_size': 8,
+    'batch_size': 6,
     'epochs': 40,
     'seed': 0,
     'downsize_input': True,
