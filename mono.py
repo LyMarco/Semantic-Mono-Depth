@@ -492,6 +492,7 @@ def train(args):
             val_loss = 0
 
             val_losses.append(val_loss)
+            torch.save(model.state_dict(), 'Epoch_%d.h5' % (epoch+1))
             print('Epoch [%d/%d], Loss: %.4f, Val Loss: %.4f,  Time (s): %d' % (
                 epoch+1, args.epochs, avg_loss, val_loss, time_elapsed))
 
