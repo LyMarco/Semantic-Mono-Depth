@@ -399,8 +399,9 @@ def train(args):
     # np.random.seed(args.seed)
 
     # DATALOADERS
+    print("args", args)
     trainloader = torch.utils.data.DataLoader(
-        args.train_data, batch_size=args.batch_size, shuffle=True)
+        depth_train_full, batch_size=args.batch_size, shuffle=True)
     testloader = torch.utils.data.DataLoader(
         args.test_data, batch_size=args.batch_size, shuffle=True)
 
