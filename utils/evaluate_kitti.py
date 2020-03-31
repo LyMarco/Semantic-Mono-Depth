@@ -44,7 +44,7 @@ if __name__ == '__main__':
                 disp = cv2.imread(args.gt_path + "/training/disp_noc_0/" + ids[i] + "_10.png", -1)
                 disp = disp.astype(np.float32) / 256
                 gt_disparities.append(disp)
-
+            print("HII", pred_disparities)
             gt_depths, pred_depths, pred_disparities_resized = convert_disps_to_depths_kitti(gt_disparities, pred_disparities)
             
         if args.split == 'kitti':
