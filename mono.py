@@ -512,7 +512,7 @@ args_dict = {
     'gpu': True,
     'loss': "DEPTH",
     'kernel': 3,
-    'num_filters': 64,
+    'num_filters': 32,
     'learn_rate': 0.001,
     'batch_size': 16,
     'epochs': 40,
