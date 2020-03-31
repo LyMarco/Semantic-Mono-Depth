@@ -92,8 +92,8 @@ data_path = "./images/"
 #Original scale is 1242x375
 scale = RescaleDispSeg((256, 512))
 
-train_dir = os.path.join(data_path, 'training')
-# test_dir = os.path.join(data_path, 'testing')
+train_dir = './images/training'
+# test_dir = './images/testing'
 
 depth_train_full = DispSegDataset(train_dir, scale)
 
