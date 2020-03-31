@@ -7,6 +7,7 @@ parser = argparse.ArgumentParser(description='Evaluation on the KITTI dataset')
 parser.add_argument('--split',               type=str,   help='data split, kitti or eigen',         required=True)
 parser.add_argument('--predicted_disp_path', type=str,   help='path to estimated disparities',      required=True)
 parser.add_argument('--gt_path',             type=str,   help='path to ground truth disparities',   required=True)
+parser.add_argument('--task', type=str,help='Which type of data',      default=="single")
 parser.add_argument('--min_depth',           type=float, help='minimum depth for evaluation',        default=1e-3)
 parser.add_argument('--max_depth',           type=float, help='maximum depth for evaluation',        default=80)
 parser.add_argument('--eigen_crop',                      help='if set, crops according to Eigen NIPS14',   action='store_true')
@@ -14,9 +15,20 @@ parser.add_argument('--garg_crop',                       help='if set, crops acc
 
 args = parser.parse_args()
 
+width_to_focal = dict()
+width_to_focal[1242] = 721.5377
+width_to_focal[1241] = 718.856
+width_to_focal[1224] = 707.0493
+width_to_focal[1238] = 718.3351
+
 if __name__ == '__main__':
 
     pred_disparities = np.load(args.predicted_disp_path)
+    if args.task == 'single':
+        pred_disp = pred_disparities[0]
+        pred_disp = width * cv2.resize(pred_disp, (width, height), interpolation=cv2.INTER_LINEAR)
+        pred_depth = width_to_focal[width] * 0.54 / pred_disp
+        cv2.imwrite(f"{i}_depth.png", pred_depth)
 
     if args.split == 'kitti_test':
         num_samples = 40
