@@ -29,7 +29,7 @@ if __name__ == '__main__':
         height, width = pred_disp.shape
 
         pred_disp = width * cv2.resize(pred_disp, (width, height), interpolation=cv2.INTER_LINEAR)
-        pred_depth = width_to_focal[width] * 0.54 / pred_disp
+        pred_depth = 710.0 * 0.54 / pred_disp
         cv2.imwrite("single_depth.png", pred_depth)
 
     if args.split == 'kitti_test':
