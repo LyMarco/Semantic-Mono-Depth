@@ -348,7 +348,7 @@ def depth_loss(out_disp, out_sem, target_disp_l, target_disp_r, target_sem):
 
 def sem_loss(out_disp, out_sem, target_disp_l, target_disp_r, target_sem):
     CE = nn.CrossEntropyLoss()
-    return CE(out_sem, target_sem)
+    return CE(out_sem, target_sem.long().squeeze(1))
 
 
 def total_loss(out_disp, out_sem, target_disp_l, target_disp_r, target_sem):
@@ -510,7 +510,7 @@ def train(args):
 args = AttrDict()
 args_dict = {
     'gpu': True,
-    'loss': "DEPTH",
+    'loss': "DEPTH-SEG",
     'kernel': 3,
     'num_filters': 64,
     'learn_rate': 0.001,
