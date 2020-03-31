@@ -31,6 +31,7 @@ if __name__ == '__main__':
         pred_disp = width * cv2.resize(pred_disp, (width, height), interpolation=cv2.INTER_LINEAR)
         pred_depth = 710.0 * 0.54 / pred_disp
         cv2.imwrite("single_depth.png", pred_depth)
+        return
 
     if args.split == 'kitti_test':
         num_samples = 40
