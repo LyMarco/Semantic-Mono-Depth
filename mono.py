@@ -36,6 +36,7 @@ class DispSegDataset(Dataset):
         self.disp_left = io.imread_collection(self.disp_left_dir)
         self.disp_right = io.imread_collection(self.disp_right_dir)
         self.semantic = io.imread_collection(self.semantic_dir)
+        print("root dir", root_dir)
 
     def __len__(self):
       return len(self.left)
