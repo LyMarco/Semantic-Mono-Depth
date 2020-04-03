@@ -266,13 +266,13 @@ def cpu_img(image, n=1):
 
 print(len(depth_train_full))
 k = 1
-plt.figure(figsize=(16, 16))
-image = depth_train_full[k]
-plt.subplot(3, 2, 1), plt.imshow(cpu_img(image['left'], n=3))
-plt.subplot(3, 2, 2), plt.imshow(cpu_img(image['right'], n=3))
-plt.subplot(3, 2, 3), plt.imshow(cpu_img(image['disp_left']))
-plt.subplot(3, 2, 4), plt.imshow(cpu_img(image['disp_right']))
-plt.subplot(3, 2, 5), plt.imshow(cpu_img(image['semantic']))
+# plt.figure(figsize=(16, 16))
+# image = depth_train_full[k]
+# plt.subplot(3, 2, 1), plt.imshow(cpu_img(image['left'], n=3))
+# plt.subplot(3, 2, 2), plt.imshow(cpu_img(image['right'], n=3))
+# plt.subplot(3, 2, 3), plt.imshow(cpu_img(image['disp_left']))
+# plt.subplot(3, 2, 4), plt.imshow(cpu_img(image['disp_right']))
+# plt.subplot(3, 2, 5), plt.imshow(cpu_img(image['semantic']))
 
 """#Model
 
@@ -781,7 +781,7 @@ def train(args):
             # val_loss = 0
             
             val_losses.append(val_loss)
-            torch.save(model.parameters(), f"epoch_{epoch}.h5")
+            torch.save(model.state_dict(), f"epoch_{epoch}.h5")
             print('Epoch [%d/%d], Loss: %.4f, Val Loss: %.4f,  Time (s): %d' % (
                 epoch+1, args.epochs, avg_loss, val_loss, time_elapsed))
             
@@ -793,6 +793,7 @@ def train(args):
     plt.legend()
     plt.title("Performance")
     plt.xlabel("Epochs")
+    # plt.savefig("training_curve")
     return model
 
 # Arguments for training
@@ -804,8 +805,8 @@ args_dict = {
               'kernel':3,
               'num_filters':16, 
               'learn_rate':0.0003, 
-              'batch_size':8, 
-              'epochs':10, 
+              'batch_size':16, 
+              'epochs':20, 
               'seed':0,
               'downsize_input':True,
               'train_data':depth_train_full,
@@ -819,107 +820,6 @@ model_depth_seg = train(args)
 
 Trains a model for several epochs at a time
 """
-
-# # Debug training loop - Trains a model for several epochs at a time
-
-# def debug_train(model, device, criterion, optimizer, epochs, prev_epochs, graph):
-    
-#     # Train the model
-#     print("Beginning training ...")
-
-#     start = time.time()
-#     train_losses = []
-#     val_losses = []
-#     valid_accs = []
-#     for epoch in range(epochs):
-#         # Train the Model
-#         model.train() # Change model to 'train' mode
-#         model.double()
-        
-#         losses = []
-
-#         # Forward + Backward + Optimize
-#         for i_batch, sample_batched in enumerate(trainloader):
-#             optimizer.zero_grad()
-
-#             left = sample_batched['left']
-#             right = sample_batched['right']
-#             disp_left = sample_batched['disp_left']
-#             disp_right = sample_batched['disp_right']
-#             semantic = sample_batched['semantic']
-
-#             model_disp, model_semantic = model(left)
-            
-#             loss = criterion(model_disp, model_semantic, disp_left, disp_right, semantic)
-#             loss.backward()
-#             optimizer.step()
-
-#             losses.append(loss.data.item())
-        
-            
-#         avg_loss = np.mean(losses)
-#         model.eval()
-#         # val_loss = validation(model, criterion, testloader, device)
-#         val_loss = 0
-
-#         train_losses.append(avg_loss)
-#         val_losses.append(val_loss)
-
-#         print('Epoch [%d/%d], Loss: %.4f, Val Loss: %.4f, Time: %ds' % (
-#               epoch+1+prev_epochs, epochs+prev_epochs, avg_loss, val_loss, time.time() - start))
-
-#     # Plot training curve
-#     plt.figure(figsize=(10, 8))
-#     plt.plot(train_losses, "b-", label="Training")
-#     plt.plot(val_losses, "r-", label="Validation")
-#     plt.legend()
-#     plt.title(graph)
-#     plt.xlabel("Epochs")
-
-#     print('Trained Network on [%d] total epochs thus far' % (epochs + prev_epochs))
-
-#     return model
-
-# debug_args = AttrDict()
-# args_dict = {
-#               'gpu':True,  
-#               'kernel':3,
-#               'num_filters':16, 
-#               'learn_rate':0.0003, 
-#               'batch_size':4, 
-#               'seed':100,
-#               'train_data':depth_train_full,
-#               'test_data':depth_train_full,
-#               'downsize_input':True,
-# }
-# debug_args.update(args_dict)
-
-# torch.set_num_threads(5)
-# np.random.seed(args_dict['seed'])
-
-# trainloader = torch.utils.data.DataLoader(debug_args.train_data, batch_size=debug_args.batch_size, shuffle=True)
-# testloader = torch.utils.data.DataLoader(debug_args.test_data, batch_size=debug_args.batch_size, shuffle=True)
-    
-# num_in_channels = 1 if not debug_args.downsize_input else 3
-
-# # LOSS
-# criterion = depth_loss
-
-# device = torch.device("cuda")
-
-# segnet = SegNet()
-# optimizer_tony = torch.optim.Adam(segnet.parameters(), lr=debug_args.learn_rate)
-# segnet.cuda();
-
-# segnet = debug_train(segnet, device, total_loss, optimizer_tony, 2, 12, "Depth Loss SegNet")
-
-# unet = UNet(in_channels=num_in_channels, out_channels=1,
-#           kernel=debug_args.kernel, num_features=debug_args.num_filters, num_seg_classes=6)
-# optimizer_unet = torch.optim.Adam(unet.parameters(), lr=debug_args.learn_rate)
-# unet.cuda();
-
-# unet = debug_train(unet, device, depth_loss, optimizer_unet, 10, 0, "Depth Loss Modified UNet")
-
 """#Evaluation
 
 ## Display
@@ -944,15 +844,6 @@ def display(i, data, network):
     plt.subplot(2, 3, 3), plt.imshow(disp_result, cmap='jet')
     plt.subplot(2, 3, 4), plt.imshow(cpu_img(sample['semantic']))
     plt.subplot(2, 3, 5), plt.imshow(sem_result)
-
-# plt.figure(figsize=(28, 8))
-# display(1, depth_train_full, segnet)
-
-# plt.figure(figsize=(28, 8))
-# display(1, depth_train_full, unet)
-
-# plt.figure(figsize=(28, 8))
-# display(199, depth_train_full, model_depth)
 
 plt.figure(figsize=(28, 8))
 display(199, depth_train_full, model_depth_seg)
