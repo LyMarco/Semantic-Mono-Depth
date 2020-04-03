@@ -766,9 +766,6 @@ def train(args):
             
             loss = criterion(model_disp, model_semantic, disp_left, disp_right, semantic)
 
-            # print(loss)
-            # break
-
             loss.backward()
             optimizer.step()
 
@@ -784,6 +781,7 @@ def train(args):
             # val_loss = 0
             
             val_losses.append(val_loss)
+            torch.save(model.parameters(), f"epoch_{epoch}.h5")
             print('Epoch [%d/%d], Loss: %.4f, Val Loss: %.4f,  Time (s): %d' % (
                 epoch+1, args.epochs, avg_loss, val_loss, time_elapsed))
             
@@ -806,7 +804,7 @@ args_dict = {
               'kernel':3,
               'num_filters':16, 
               'learn_rate':0.0003, 
-              'batch_size':4, 
+              'batch_size':8, 
               'epochs':10, 
               'seed':0,
               'downsize_input':True,
