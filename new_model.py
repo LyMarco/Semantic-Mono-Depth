@@ -36,17 +36,17 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 """##Building datasets"""
 
 # Download segment data
-!wget https://s3.eu-central-1.amazonaws.com/avg-kitti/data_semantics.zip
-!unzip data_semantics.zip training/semantic/* -d ./images
-!unzip data_semantics.zip training/image_2/* -d ./images
+# !wget https://s3.eu-central-1.amazonaws.com/avg-kitti/data_semantics.zip
+# !unzip data_semantics.zip training/semantic/* -d ./images
+# !unzip data_semantics.zip training/image_2/* -d ./images
 
-# Download KITTI 2015 Stereo dataset
-!wget https://s3.eu-central-1.amazonaws.com/avg-kitti/data_scene_flow.zip
-!unzip data_scene_flow.zip training/disp_noc_0/* -d ./images/
-!unzip data_scene_flow.zip training/disp_noc_1/* -d ./images/
-!unzip data_scene_flow.zip training/disp_occ_0/* -d ./images/
-!unzip data_scene_flow.zip training/disp_occ_1/* -d ./images/
-!unzip data_scene_flow.zip training/image_3/* -d ./images/
+# # Download KITTI 2015 Stereo dataset
+# !wget https://s3.eu-central-1.amazonaws.com/avg-kitti/data_scene_flow.zip
+# !unzip data_scene_flow.zip training/disp_noc_0/* -d ./images/
+# !unzip data_scene_flow.zip training/disp_noc_1/* -d ./images/
+# !unzip data_scene_flow.zip training/disp_occ_0/* -d ./images/
+# !unzip data_scene_flow.zip training/disp_occ_1/* -d ./images/
+# !unzip data_scene_flow.zip training/image_3/* -d ./images/
 
 # Commented out IPython magic to ensure Python compatibility.
 # %%shell
